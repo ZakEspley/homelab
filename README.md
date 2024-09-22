@@ -130,15 +130,28 @@ sudo rm -rf /var/lib/docker.old
 I ran the following docker command, which creates a mounting point at `/mnt/ext1/portainer/data` because that is what I did before I knew how to move the docker data directory. I am not 100% that this is the best but I am going to keep it since I already have things set up to work that way.
 
 ```bash
-docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /mnt/ext1/portainer/data:/data portainer/portainer-ce:2.21.1
+sudo docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /mnt/ext1/portainer/data:/data portainer/portainer-ce:2.21.1
 ```
 
 Once it it runs you open a browser and go to https://dirac.local:9443 to finish the setup.
 
 ### Installing Cloudflare Tunnel
-The next step will be to install a Cloudflare Tunnel. I already have everything created on Cloudflare, so at this point I just need to go to https://one.dash.cloudflare.com/ and then go to `Network > Tunnels`, click on the three dots on the right and select configure from the dropdown. Then you need to click the button on the bottom of the page to refresh you token. Then click on the docker command button and coppy the command. It should look like
+The next step will be to install a Cloudflare Tunnel. I already have everything created on Cloudflare, so at this point I just need to go to https://one.dash.cloudflare.com/ and then go to `Network > Tunnels`, click on the three dots on the right and select configure from the dropdown. Then you need to click the button on the bottom of the page to refresh you token. **Make sure to click the save button after you refresh the token** Then click on the docker command button and coppy the command. It should look like
 
 ```bash
 docker run cloudflare/cloudflared:latest tunnel --no-autoupdate run --token <tokenID>
 ```
-We are going to go into Portainer to make this and not run it in the terminal. So log into Portainer
+We are going to go into Portainer to make this and not run it in the terminal. So log into Portainer and create a new container. Give it the name `cloudflareTunnel` (but it could be anything) and then in the image section paste
+```
+cloudflare/cloudflared:latest
+```
+Then scroll down to the Advanced Container Settings and then in the _Command_ section, select _Override_ and paste in the following command
+```bash
+tunnel --no-autoupdate run --token <tokenID>
+```
+Then click _Restart Policy_ and select _Always_. Finally click _Deploy the container_
+
+You should then check the Cloudflare site make sure that the tunnel is healthy.
+
+
+### 4. Install Nextcloud-aio
