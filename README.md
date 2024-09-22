@@ -29,10 +29,15 @@ I just downloaded the latest Raspberry Pi Os Imager on my Windows Machine and in
 
 ```bash
 sudo apt update
-sudo uapt upgrade
+sudo apt upgrade
 ```
 
 ### 2. Auto Mounting My External SSD
+First you need to create a mount on the drive to mount the harddrive. I choose to do this at `/mnt/ext1`. So I ran
+```bash
+sudo mkdir /mnt/ext1
+```
+
 I followed [this guide for endevourOS](https://forum.endeavouros.com/t/tutorial-how-to-permanently-mount-external-internal-drives-in-linux/18688)
 
 Plug in the SSD if it is not aleady plugged in and then run
@@ -48,6 +53,17 @@ and add the following line at the bottom to use systemd to automount the drive t
 ```bash
 UUID=<UUID of your external device> /mnt/ext1      ext4    noatime,x-systemd.automount,x-systemd.device-timeout=10,x-systemd.idle-timeout=1min 0 2
 ```
+
+Then you need to run
+```bash
+sudo systemctl daemon-reload
+```
+
+Followed by
+```bash
+sudo mount -a
+```
+
 
 ### 3. Installing Docker
 At the time of writing, when installing docker on 64 but Raspbian OS we must use the [Debian instrucions](https://docs.docker.com/engine/install/debian/). The instructions say to run the following codes:
