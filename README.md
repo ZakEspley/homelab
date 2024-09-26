@@ -155,3 +155,27 @@ You should then check the Cloudflare site make sure that the tunnel is healthy.
 
 
 ### 4. Install Nextcloud-aio
+
+
+### Installing Moonlight
+I started using the Moonlight [QT Github Repo Wiki](https://github.com/moonlight-stream/moonlight-docs/wiki/Installing-Moonlight-Qt-on-Raspberry-Pi-4). I am not sure if it will work with a Raspberry Pi OS Lite but the documentation seems to suggest that it works since there is a section on getting audio to work with Raspberry Pi OS Lite. So we will see if this works.
+
+Start by running the commands below to get download and install Moonlight-qt.
+```bash
+curl -1sLf 'https://dl.cloudsmith.io/public/moonlight-game-streaming/moonlight-qt/setup.deb.sh' | distro=raspbian codename=$(lsb_release -cs) sudo -E bash
+sudo apt install moonlight-qt
+```
+
+Then to get Audio working we have to run
+Perform the following steps to install and configure PulseAudio:
+ 1. `sudo apt install pulseaudio`
+ 2. `sudo raspi-config`
+ 3. Navigate to Advanced Settings -> Audio Config and select "PulseAudio"
+ 4. Reboot your Pi (`sudo reboot`)
+ 5. `sudo raspi-config`
+ 6. Navigate to System Settings -> Audio and select the audio output you want to use
+
+That was it.
+
+
+
